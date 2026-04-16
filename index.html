@@ -91,8 +91,6 @@ button {
 
 <script>
 const API = "http://localhost:3000/articles";
-
-// GET ALL
 function getArticles() {
   fetch(API)
     .then(res => res.json())
@@ -132,8 +130,6 @@ function addArticle() {
     getArticles();
   });
 }
-
-// DELETE (IMPORTANT: using ID)
 function deleteArticle(id) {
   fetch(API + "/" + id, {
     method: "DELETE"
@@ -141,8 +137,6 @@ function deleteArticle(id) {
     getArticles();
   });
 }
-
-// أول تشغيل
 getArticles();
 </script>
 
