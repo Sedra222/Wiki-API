@@ -12,7 +12,6 @@ const articleSchema = new mongoose.Schema({
   title: String,
   content: String
 });
-
 const Article = mongoose.model("Article", articleSchema);
 app.get("/articles", async (req, res) => {
   const articles = await Article.find();
@@ -31,8 +30,6 @@ app.patch("/articles/:id", async (req, res) => {
   await Article.findByIdAndUpdate(req.params.id, req.body);
   res.json({ message: "Updated" });
 });
-
-// SERVER
 app.listen(3000, () => {
   console.log("Server running on port 3000");
 });
