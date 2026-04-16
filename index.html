@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Wiki Pro</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  color: white;
+}
+
+.container {
+  width: 60%;
+  margin: auto;
+  margin-top: 40px;
+}
+
+h1 {
+  text-align: center;
+  font-size: 40px;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 12px;
+  margin: 6px 0;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+}
+
+textarea {
+  height: 80px;
+}
+
+button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+.add {
+  background: #22c55e;
+  color: white;
+}
+
+.load {
+  background: #3b82f6;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.delete {
+  background: #ef4444;
+  color: white;
+}
+
+.card {
+  background: rgba(255,255,255,0.05);
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 15px;
+  backdrop-filter: blur(5px);
+}
+</style>
+</head>
+
+<body>
+
+<h1>📚 Wiki Pro API</h1>
+
+<div class="container">
+
+  <h3>Add Article</h3>
+  <input id="title" placeholder="Title">
+  <textarea id="content" placeholder="Content"></textarea>
+  <button class="add" onclick="addArticle()">Add Article</button>
+
+  <hr>
+
+  <button class="load" onclick="getArticles()">Load Articles</button>
+
+  <div id="list"></div>
+
+</div>
+
+<script>
+const API = "http://localhost:3000/articles";
+
+// GET ALL
+function getArticles() {
+  fetch(API)
+    .then(res => res.json())
+    .then(data => {
+      const list = document.getElementById("list");
+      list.innerHTML = "";
+
+      data.forEach(article => {
+        const div = document.createElement("div");
+        div.className = "card";
+
+        div.innerHTML = `
+          <h3>${article.title}</h3>
+          <p>${article.content}</p>
+
+          <button class="delete"
+            onclick="deleteArticle('${article._id}')">
+            Delete
+          </button>
+        `;
+
+        list.appendChild(div);
+      });
+    });
+}
+
+// ADD
+function addArticle() {
+  fetch(API, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      title: document.getElementById("title").value,
+      content: document.getElementById("content").value
+    })
+  }).then(() => {
+    getArticles();
+  });
+}
+
+// DELETE (IMPORTANT: using ID)
+function deleteArticle(id) {
+  fetch(API + "/" + id, {
+    method: "DELETE"
+  }).then(() => {
+    getArticles();
+  });
+}
+
+// أول تشغيل
+getArticles();
+</script>
+
+</body>
+</html>
